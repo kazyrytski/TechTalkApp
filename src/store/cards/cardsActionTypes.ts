@@ -16,6 +16,7 @@ export type CardsAction = AddCardAction;
 export interface Card {
   id: string;
   title: string;
-  date: string;
-  description: string;
+  agenda: string;
+  day: number;
+  month: string;
 }

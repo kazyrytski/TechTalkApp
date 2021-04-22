@@ -6,14 +6,16 @@ const initialState: CardsState = {
     {
       id: uuidv4(),
       title: "Some title1",
-      date: new Date().toDateString(),
-      description: "Some Desc1",
+      agenda: "Some agenda",
+      day: new Date().getUTCDate(),
+      month: new Date().toLocaleString("default", { month: "short" }),
     },
     {
       id: uuidv4(),
       title: "Some title2",
-      date: new Date().toDateString(),
-      description: "Some Desc2",
+      agenda: "Some agenda2",
+      day: new Date().getUTCDate(),
+      month: new Date().toLocaleString("default", { month: "short" }),
     },
   ],
 };

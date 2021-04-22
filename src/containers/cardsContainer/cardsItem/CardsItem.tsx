@@ -8,8 +8,9 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
   return (
     <li className="card__item">
       <div className="card__title">{cardData.title}</div>
-      <div className="card__date">{cardData.date}</div>
-      <div className="card__desc">{cardData.description}</div>
+      <div className="card__agenda">{cardData.agenda}</div>
+      <div className="card__day">{cardData.day}</div>
+      <div className="card__month">{cardData.month}</div>
     </li>
   );
 };
