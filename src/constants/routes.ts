@@ -8,16 +8,17 @@ export const ROUTES = {
   getStartPagePath: () => {
     return `${routes.START_PAGE}`;
   },
+  CARDS: {
+    getCardsPath: () => {
+      return `${routes.CARDS}`;
+    },
 
-  getCardsPath: () => {
-    return `${routes.CARDS}`;
-  },
+    getCardsListPath: () => {
+      return `${routes.CARDS}/list`;
+    },
 
-  getCardsListPath: () => {
-    return `${routes.CARDS}/list`;
-  },
-
-  getCardsAddPath: () => {
-    return `${routes.CARDS}/add`;
+    getCurrentCardPath: () => {
+      return `${routes.CARDS}/:id`;
+    },
   },
 };

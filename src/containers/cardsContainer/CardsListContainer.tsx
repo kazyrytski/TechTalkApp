@@ -1,11 +1,7 @@
 import CardsList from "./cardsList/CardsList";
 
 const CardsListContainer = () => {
-  return (
-    <div>
-      <CardsList />
-    </div>
-  );
+  return <CardsList />;
 };
 
 export default CardsListContainer;

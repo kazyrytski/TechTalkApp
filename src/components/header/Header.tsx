@@ -4,14 +4,22 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useActions } from "hooks";
 import { v4 as uuidv4 } from "uuid";
 
-import "./header.scss";
-
 interface CardInfo {
   title: string;
   agenda: string;
 }
 
 const useStyles = makeStyles({
+  header: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    minHeight: 80,
+    padding: "0 20px",
+    backgroundColor: "#282c34",
+    fontSize: 24,
+    color: "#61dafb",
+  },
   paper: {
     display: "flex",
     flexDirection: "column",
@@ -60,7 +68,7 @@ export default function Header() {
   };
 
   return (
-    <header className="header">
+    <header className={classes.header}>
       <h3 className="header_title">Tech Talks App</h3>
       <Button onClick={() => setOpen(true)}> Add Card</Button>
       <Dialog

@@ -10,7 +10,11 @@ const MainApp = () => {
       <main className="main-content">
         <Route
           exact
-          path={[ROUTES.getCardsListPath(), ROUTES.getCardsAddPath()]}
+          path={[
+            ROUTES.getStartPagePath(),
+            ROUTES.CARDS.getCardsPath(),
+            ROUTES.CARDS.getCurrentCardPath(),
+          ]}
           component={CardsPage}
         />
       </main>

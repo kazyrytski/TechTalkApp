@@ -3,11 +3,11 @@ import CardsItem from "../cardsItem/CardsItem";
 import { Card } from "store/cards/cardsActionTypes";
 
 const CardsList = () => {
-  const { cards } = useTypedSelector((state) => state.cards);
+  const { cardList } = useTypedSelector((state) => state.cards);
 
   return (
     <ul>
-      {cards.map((card: Card) => {
+      {cardList.map((card: Card) => {
         return <CardsItem cardData={card} key={card.id} />;
       })}
     </ul>
