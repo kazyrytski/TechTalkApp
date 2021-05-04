@@ -10,30 +10,35 @@ interface CardsItemProps {
 
 const CardsItem = ({ cardData }: CardsItemProps) => {
   return (
-    <li className={styles.cardItem}>
-      <div className={styles.cardDate}>
-        <div className={styles.cardDay}>{cardData.day}</div>
-        <div className={styles.cardMonth}>{cardData.month}</div>
-      </div>
+      <li className={styles.cardItem}>
+        <div className={styles.cardDate}>
+          {/*<div className={styles.cardDay}>{cardData.dates}</div>*/}
+          {/*<div className={styles.cardMonth}>{cardData.dates}</div>*/}
+        </div>
 
-      <div className={styles.cardContent}>
-        <div className={styles.cardInfo}>
-          <div className={styles.cardTitle}>{cardData.title}</div>
-          <div className={styles.cardAgenda}>{cardData.agenda}</div>
+        <div className={styles.cardContent}>
+          <div className={styles.cardInfo}>
+            <div className={styles.cardTitle}>{cardData.title}</div>
+            <div className={styles.cardAgenda}>{cardData.description}</div>
+          </div>
+          <div className={styles.cardControl}>
+            <Link
+                to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}
+                className={styles.cardEdit}
+            >
+              Edit
+            </Link>
+            <div className={styles.cardDelete}>Delete</div>
+            <div className={styles.cardCancel}>Cancel</div>
+            <Link
+                to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}
+                className={styles.cardView}
+            >
+              View
+            </Link>
+          </div>
         </div>
-        <div className={styles.cardControl}>
-          <div className={styles.cardEdit}>Edit</div>
-          <div className={styles.cardDelete}>Delete</div>
-          <div className={styles.cardCancel}>Cancel</div>
-          <Link
-            to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}
-            className={styles.cardView}
-          >
-            View
-          </Link>
-        </div>
-      </div>
-    </li>
+      </li>
   );
 };
 

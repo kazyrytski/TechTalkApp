@@ -4,27 +4,27 @@ import { cardSelector } from "store/cards/cardsSelector";
 import { useEffect } from "react";
 
 interface ParamTypes {
-  id: string;
+    id: string;
 }
 
 const CardFullView = () => {
-  const { id } = useParams<ParamTypes>();
+    const { id } = useParams<ParamTypes>();
 
-  const card = useTypedSelector(cardSelector(id));
-  const { rickAndMortyData } = useTypedSelector((state) => state.cards);
-  const { getRickAndMortyData } = useActions();
+    const card = useTypedSelector(cardSelector(id));
+    const { rickAndMortyData } = useTypedSelector((state) => state.cards);
+    const { getMeetings } = useActions();
 
-  useEffect(() => {
-    getRickAndMortyData();
-  }, []);
+    useEffect(() => {
+        getMeetings();
+    }, []);
 
-  return (
-    <>
-      <div>{card && card.title}</div>
-      <div>{card && card.agenda}</div>
-      <div>{rickAndMortyData && rickAndMortyData.characters}</div>
-    </>
-  );
+    return (
+        <>
+            <div>{card && card.title}</div>
+            <div>{card && card.description}</div>
+            <div>{rickAndMortyData && rickAndMortyData.characters}</div>
+        </>
+    );
 };
 
 export default CardFullView;

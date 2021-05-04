@@ -6,16 +6,12 @@ const initialState: CardsState = {
     {
       id: uuidv4(),
       title: "Some title1",
-      agenda: "Some agenda",
-      day: new Date().getUTCDate(),
-      month: new Date().toLocaleString("default", { month: "short" }),
+      description: "Some agenda",
     },
     {
       id: uuidv4(),
       title: "Some title2",
-      agenda: "Some agenda2",
-      day: new Date().getUTCDate(),
-      month: new Date().toLocaleString("default", { month: "short" }),
+      description: "Some agenda2",
     },
   ],
   rickAndMortyData: null,
