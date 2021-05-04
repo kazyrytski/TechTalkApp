@@ -7,12 +7,31 @@ export const addCard = (card: Card) => (dispatch: Dispatch<CardsActions>) => {
   dispatch(actionsType.addCard(card));
 };
 
-export const getRickAndMortyData = () => async (
-  dispatch: Dispatch<CardsActions>
+export const getMeetings = () => async (
+    dispatch: Dispatch<CardsActions>
 ) => {
   try {
-    const res = await HttpService.get<RickAndMortyData>(
-      "https://rickandmortyapi.com/api"
+    const res = await HttpService.getData<RickAndMortyData>(
+        "http://localhost:5000/api/meetings"
+    );
+
+    if (res instanceof Error) {
+      throw res;
+    }
+    dispatch(actionsType.getMeetingsList(res));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const createMeetings = (payload) => async (
+    dispatch: Dispatch<CardsActions>
+) => {
+  try {
+    const res = await HttpService.post<RickAndMortyData>(
+        "http://localhost:5000/api/meetings", {
+          body: JSON.stringify(payload)
+        }
     );
 
     if (res instanceof Error) {

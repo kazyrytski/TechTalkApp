@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 
 interface CardInfo {
   title: string;
-  agenda: string;
+  description: string;
 }
 
 const useStyles = makeStyles({
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
   },
 });
 
-const initCardInfo = { title: "", agenda: "" };
+const initCardInfo = { title: "", description: "" };
 
 export default function Header() {
   const classes = useStyles();
@@ -57,10 +57,12 @@ export default function Header() {
   const onSaveCard = () => {
     const newCard = {
       id: uuidv4(),
-      title: cardInfo.title,
-      agenda: cardInfo.agenda,
-      day: new Date().getUTCDate(),
-      month: new Date().toLocaleString("default", { month: "short" }),
+      // title: cardInfo.title,
+      // agenda: cardInfo.agenda,
+      // day: new Date().getUTCDate(),
+      // month: new Date().toLocaleString("default", { month: "short" }),
+      title:  cardInfo.title,
+      description: cardInfo.description,
     };
     addCard(newCard);
     setOpen(false);
@@ -90,7 +92,7 @@ export default function Header() {
 
         <Button
           onClick={onSaveCard}
-          disabled={!(!!cardInfo.title && !!cardInfo.agenda)}
+          disabled={!(!!cardInfo.title && !!cardInfo.description)}
         >
           {" "}
           save card

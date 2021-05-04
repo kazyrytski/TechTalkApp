@@ -3,13 +3,16 @@ import { parseResponse } from "utils/fetch";
 interface Config {}
 
 export const HttpService = {
-  async get<T>(url: string, config: Config = {}): Promise<T | Error> {
+  async getData<T>(url: string, config: Config = {}): Promise<T | Error> {
     try {
       const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
         method: "GET",
         ...config,
       });
-      return await parseResponse(response);
+      return await response.json();
     } catch (error) {
       return error;
     }
@@ -18,6 +21,9 @@ export const HttpService = {
   async post<T>(url: string, config: Config = {}): Promise<T | Error> {
     try {
       const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
         method: "POST",
         ...config,
       });
@@ -42,6 +48,9 @@ export const HttpService = {
   async delete<T>(url: string, config: Config = {}): Promise<T | Error> {
     try {
       const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
         method: "DELETE",
         ...config,
       });
