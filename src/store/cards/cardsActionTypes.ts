@@ -13,7 +13,7 @@ export interface Card {
     id: string;
     title: string;
     description: string;
-    // dates: any;
+    dates: any;
     // day: number;
     // month: string;
 }
