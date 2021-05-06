@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "constants/routes";
 import { Card } from "store/cards/cardsActionTypes";
@@ -10,6 +11,11 @@ import {makeStyles} from "@material-ui/core/styles";
 
 interface CardsItemProps {
     cardData: Card;
+}
+
+interface CardInfo {
+    title: string;
+    description: string;
 }
 
 const useStyles = makeStyles({
@@ -38,26 +44,29 @@ const useStyles = makeStyles({
 
 const CardsItem = ({ cardData }: CardsItemProps) => {
 
+    const initCardInfo = { title: "", description: "" };
+
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
+    const [cardInfo, setCardInfo] = useState<CardInfo>(initCardInfo);
 
     const { deleteMeetings, getMeetings, editMeetings } = useActions();
 
-    // const handleChangeInput = useCallback(
-    //     (event: ChangeEvent<HTMLInputElement>) =>
-    //         setCardInfo((prevCardInfo) => {
-    //             return {
-    //                 ...prevCardInfo,
-    //                 [event.target.name]: event.target.value,
-    //             };
-    //         }),
-    //     []
-    // );
+    const handleChangeInput = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) =>
+            setCardInfo((prevCardInfo) => {
+                console.log(event.target.value);
+                return {
+                    ...prevCardInfo,
+                    [event.target.name]: event.target.value,
+                };
+            }),
+        []
+    );
 
     const deleteCard = () => {
-        let cardId = cardData.participants.map(item => item._id);
-        deleteMeetings(cardId);
+        deleteMeetings(cardData.id);
         getMeetings();
     };
 
@@ -67,11 +76,11 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
 
     const editCard = () => {
         const payload = {
-            title: cardData.title,
-            description: cardData.description,
+            title: cardInfo.title,
+            description: cardInfo.description,
         };
-        let cardId = cardData.participants.map(item => item._id);
-        editMeetings(payload, cardId);
+        editMeetings(payload, cardData.id);
+        setOpen(false);
         getMeetings();
     };
 
@@ -108,19 +117,19 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
                                 name="title"
                                 value={cardData.title}
                                 containerClasses={classes.input}
-                                // onChange={handleChangeInput}
+                                onChange={handleChangeInput}
                             />
                             <Input
                                 label="Agenda"
                                 name="agenda"
                                 value={cardData.description}
-                                // onChange={handleChangeInput}
+                                onChange={handleChangeInput}
                             />
                         </form>
 
                         <Button
                             onClick={editCard}
-                            disabled={!(!!cardData.title && !!cardData.description)}
+                            // disabled={!(!!cardData.title && !!cardData.description)}
                         >
                             {" "}
                             edit card

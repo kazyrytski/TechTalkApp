@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, ChangeEvent, useCallback } from "react";
 import { Button, Dialog, Input } from "components";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,7 +42,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [cardInfo, setCardInfo] = useState<CardInfo>(initCardInfo);
 
-  const { createMeetings } = useActions();
+  const { createMeetings, getMeetings } = useActions();
 
   const handleChangeInput = useCallback(
       (event: ChangeEvent<HTMLInputElement>) =>
@@ -62,7 +63,8 @@ export default function Header() {
       participants: [{fullName: 'kek', lastName:'kek', isAdmin: true, isSpeaker: true}],
       dates: [new Date().getUTCDate(), new Date().toLocaleTimeString("default", { month: "short" })],
     };
-    createMeetings(newCard);
+    createMeetings(newCard);;
+    getMeetings();
     setOpen(false);
     setCardInfo(initCardInfo);
   };

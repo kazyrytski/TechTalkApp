@@ -64,7 +64,7 @@ export const editMeetings = (payload, id) => async (
     dispatch: Dispatch<CardsActions>
 ) => {
   try {
-    const res = await HttpService.put<RickAndMortyData>(
+    const res = await HttpService.patch<RickAndMortyData>(
         "http://localhost:5000/api/meetings/" + id, {
           body: JSON.stringify(payload)
         }

@@ -33,6 +33,21 @@ export const HttpService = {
     }
   },
 
+  async patch<T>(url: string, config: Config = {}): Promise<T | Error> {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: "PATCH",
+        ...config,
+      });
+      return await parseResponse(response);
+    } catch (error) {
+      return error;
+    }
+  },
+
   async put<T>(url: string, config: Config = {}): Promise<T | Error> {
     try {
       const response = await fetch(url, {
