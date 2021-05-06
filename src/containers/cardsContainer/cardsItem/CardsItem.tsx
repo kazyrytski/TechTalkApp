@@ -11,16 +11,10 @@ interface CardsItemProps {
 
 const CardsItem = ({ cardData }: CardsItemProps) => {
 
-    // debugger;
-    //
-    // console.log(cardData);
-
     const { deleteMeetings, getMeetings } = useActions();
 
     const deleteCard = () => {
-        debugger;
         let cardId = cardData.participants.map(item => item._id);
-        // console.log(cardId[0]);
         deleteMeetings(cardId);
         getMeetings();
     };
@@ -38,20 +32,16 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
                     <div className={styles.cardAgenda}>{cardData.description}</div>
                 </div>
                 <div className={styles.cardControl}>
-                    <Link
-                        to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}
-                        className={styles.cardEdit}
-                    >
-                        Edit
-                    </Link>
+                    {/*<Link*/}
+                    {/*    to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}*/}
+                    {/*    className={styles.cardEdit}*/}
+                    {/*>*/}
+                    {/*    Edit*/}
+                    {/*</Link>*/}
+                    <div className={styles.cardEdit} onClick={deleteCard}>Edit</div>
                     <div className={styles.cardDelete} onClick={deleteCard}>Delete</div>
                     <div className={styles.cardCancel}>Cancel</div>
-                    <Link
-                        to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}
-                        className={styles.cardView}
-                    >
-                        View
-                    </Link>
+                    <div className={styles.cardView}>View</div>
                 </div>
             </div>
         </li>
