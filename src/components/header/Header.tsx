@@ -58,11 +58,9 @@ export default function Header() {
     const newCard = {
       title: cardInfo.title,
       notes: cardInfo.agenda,
-      description: "qwerty",
+      description: cardInfo.agenda,
       participants: [{fullName: 'kek', lastName:'kek', isAdmin: true, isSpeaker: true}],
       dates: [new Date().getUTCDate(), new Date().toLocaleTimeString("default", { month: "short" })],
-      // day: new Date().getUTCDate(),
-      // month: new Date().toLocaleTimeString("default", { month: "short" }),
     };
     createMeetings(newCard);
     setOpen(false);

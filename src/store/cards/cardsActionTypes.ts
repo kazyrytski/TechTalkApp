@@ -7,6 +7,7 @@ export interface CardsState {
 export enum CardsActionTypes {
     ADD_CARD = "ADD_CARD",
     GET_MEETINGS_LIST = "GET MEETINGS LIST",
+    DELETE_MEETING_CARD = "DELETE MEETING CARD",
     SET_RICK_AND_MORTY_DATA = "SET_RICK_AND_MORTY_DATA",
 }
 export interface Card {
@@ -14,6 +15,7 @@ export interface Card {
     title: string;
     description: string;
     dates: any;
+    participants: any;
     // day: number;
     // month: string;
 }
@@ -38,6 +40,11 @@ export const actionsType = {
     getMeetingsList: (card: any) =>
         ({
             type: CardsActionTypes.GET_MEETINGS_LIST,
+            payload: card,
+        } as const),
+    deleteMeetingCard: (card: any) =>
+        ({
+            type: CardsActionTypes.DELETE_MEETING_CARD,
             payload: card,
         } as const),
 };

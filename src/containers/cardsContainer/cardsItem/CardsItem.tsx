@@ -3,12 +3,28 @@ import { ROUTES } from "constants/routes";
 import { Card } from "store/cards/cardsActionTypes";
 
 import styles from "./CardsItem.module.scss";
+import {useActions} from "hooks";
 
 interface CardsItemProps {
     cardData: Card;
 }
 
 const CardsItem = ({ cardData }: CardsItemProps) => {
+
+    // debugger;
+    //
+    // console.log(cardData);
+
+    const { deleteMeetings, getMeetings } = useActions();
+
+    const deleteCard = () => {
+        debugger;
+        let cardId = cardData.participants.map(item => item._id);
+        // console.log(cardId[0]);
+        deleteMeetings(cardId);
+        getMeetings();
+    };
+
     return (
         <li className={styles.cardItem}>
             <div className={styles.cardDate}>
@@ -28,7 +44,7 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
                     >
                         Edit
                     </Link>
-                    <div className={styles.cardDelete}>Delete</div>
+                    <div className={styles.cardDelete} onClick={deleteCard}>Delete</div>
                     <div className={styles.cardCancel}>Cancel</div>
                     <Link
                         to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}

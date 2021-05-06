@@ -42,3 +42,20 @@ export const createMeetings = (payload) => async (
     console.error(error);
   }
 };
+
+export const deleteMeetings = (id) => async (
+    dispatch: Dispatch<CardsActions>
+) => {
+  try {
+    const res = await HttpService.delete<RickAndMortyData>(
+        "http://localhost:5000/api/meetings/" + id
+    );
+
+    if (res instanceof Error) {
+      throw res;
+    }
+    dispatch(actionsType.deleteMeetingCard(res));
+  } catch (error) {
+    console.error(error);
+  }
+};
