@@ -59,3 +59,22 @@ export const deleteMeetings = (id) => async (
     console.error(error);
   }
 };
+
+export const editMeetings = (payload, id) => async (
+    dispatch: Dispatch<CardsActions>
+) => {
+  try {
+    const res = await HttpService.put<RickAndMortyData>(
+        "http://localhost:5000/api/meetings/" + id, {
+          body: JSON.stringify(payload)
+        }
+    );
+
+    if (res instanceof Error) {
+      throw res;
+    }
+    dispatch(actionsType.editMeetingCard(res));
+  } catch (error) {
+    console.error(error);
+  }
+};

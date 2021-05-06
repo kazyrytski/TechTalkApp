@@ -8,6 +8,7 @@ export enum CardsActionTypes {
     ADD_CARD = "ADD_CARD",
     GET_MEETINGS_LIST = "GET MEETINGS LIST",
     DELETE_MEETING_CARD = "DELETE MEETING CARD",
+    EDIT_MEETING_CARD = "EDIT MEETING CARD",
     SET_RICK_AND_MORTY_DATA = "SET_RICK_AND_MORTY_DATA",
 }
 export interface Card {
@@ -45,6 +46,11 @@ export const actionsType = {
     deleteMeetingCard: (card: any) =>
         ({
             type: CardsActionTypes.DELETE_MEETING_CARD,
+            payload: card,
+        } as const),
+    editMeetingCard: (card: any) =>
+        ({
+            type: CardsActionTypes.EDIT_MEETING_CARD,
             payload: card,
         } as const),
 };
