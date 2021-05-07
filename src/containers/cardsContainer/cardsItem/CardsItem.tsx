@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect, ChangeEvent, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "constants/routes";
 import { Card } from "store/cards/cardsActionTypes";
 
+import  IJSON from 'immutable-json'
+
 import styles from "./CardsItem.module.scss";
 import { useActions } from "hooks";
-import {ChangeEvent, useCallback, useState} from "react";
 import { Button, Dialog, Input } from "components";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { Map } from 'immutable';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 interface CardsItemProps {
     cardData: Card;
@@ -44,6 +50,8 @@ const useStyles = makeStyles({
 
 const CardsItem = ({ cardData }: CardsItemProps) => {
 
+
+
     const initCardInfo = { title: "", description: "" };
 
     const classes = useStyles();
@@ -53,9 +61,23 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
 
     const { deleteMeetings, getMeetings, editMeetings } = useActions();
 
+    const [editorState, setEditorState] = useState(() =>
+        EditorState.createEmpty(),
+    );
+    //
+    useEffect(() => {
+        setCardInfo((prevCardInfo) => {
+            return {
+                ...prevCardInfo,
+                ['description']: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+            };
+        })
+    }, [editorState])
+
     const handleChangeInput = useCallback(
         (event: ChangeEvent<HTMLInputElement>) =>
             setCardInfo((prevCardInfo) => {
+                console.log(event.target.name)
                 console.log(event.target.value);
                 return {
                     ...prevCardInfo,
@@ -83,7 +105,6 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
         setOpen(false);
         getMeetings();
     };
-
     return (
         <li className={styles.cardItem}>
             <div className={styles.cardDate}>
@@ -94,7 +115,7 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
             <div className={styles.cardContent}>
                 <div className={styles.cardInfo}>
                     <div className={styles.cardTitle}>{cardData.title}</div>
-                    <div className={styles.cardAgenda}>{cardData.description}</div>
+                    <div dangerouslySetInnerHTML={{ __html: draftToHtml(convertToRaw(editorState.getCurrentContent()))}} className={styles.cardAgenda}></div>
                 </div>
                 <div className={styles.cardControl}>
                     {/*<Link*/}
@@ -119,12 +140,19 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
                                 containerClasses={classes.input}
                                 onChange={handleChangeInput}
                             />
-                            <Input
-                                label="Agenda"
-                                name="agenda"
-                                value={cardData.description}
-                                onChange={handleChangeInput}
+                            <Editor
+                                editorState={editorState}
+                                toolbarClassName="toolbarClassName"
+                                wrapperClassName="wrapperClassName"
+                                editorClassName="editorClassName"
+                                onEditorStateChange={setEditorState}
                             />
+                            {/*<Input*/}
+                            {/*    label="Agenda"*/}
+                            {/*    name="agenda"*/}
+                            {/*    value={cardData.description}*/}
+                            {/*    onChange={handleChangeInput}*/}
+                            {/*/>*/}
                         </form>
 
                         <Button
