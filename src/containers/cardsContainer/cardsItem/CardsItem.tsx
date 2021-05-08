@@ -14,6 +14,7 @@ import { EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { Map } from 'immutable';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import CustomDatePicker from "../../../components/datePicker/DatePicker";
 
 interface CardsItemProps {
     cardData: Card;
@@ -39,8 +40,8 @@ const useStyles = makeStyles({
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        height: 400,
-        width: 300,
+        minHeight: "70%",
+        maxWidth: 1000,
         padding: 10,
     },
     input: {
@@ -50,35 +51,31 @@ const useStyles = makeStyles({
 
 const CardsItem = ({ cardData }: CardsItemProps) => {
 
-
-
     const initCardInfo = { title: "", description: "" };
+    const [date, setDate] = useState(new Date(cardData.dates[0]));
+    const [time, setTime] = useState(cardData.dates[1]);
 
     const classes = useStyles();
-
     const [open, setOpen] = useState(false);
-    const [cardInfo, setCardInfo] = useState<CardInfo>(initCardInfo);
+    const [cardInfo, setCardInfo] = useState<CardInfo>(cardData);
 
     const { deleteMeetings, getMeetings, editMeetings } = useActions();
+    const [editorState, setEditorState] = useState(
+        () =>
+            EditorState.createWithContent(convertFromRaw(JSON.parse(cardData.description)))
+        );
 
-    const [editorState, setEditorState] = useState(() =>
-        EditorState.createEmpty(),
-    );
-    //
+
+
     useEffect(() => {
-        setCardInfo((prevCardInfo) => {
-            return {
-                ...prevCardInfo,
-                ['description']: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
-            };
-        })
-    }, [editorState])
+        getMeetings();
+    }, [open])
+
+
 
     const handleChangeInput = useCallback(
         (event: ChangeEvent<HTMLInputElement>) =>
             setCardInfo((prevCardInfo) => {
-                console.log(event.target.name)
-                console.log(event.target.value);
                 return {
                     ...prevCardInfo,
                     [event.target.name]: event.target.value,
@@ -99,23 +96,25 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
     const editCard = () => {
         const payload = {
             title: cardInfo.title,
-            description: cardInfo.description,
+            description: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
+            dates: [date, time]
         };
         editMeetings(payload, cardData.id);
         setOpen(false);
-        getMeetings();
+
     };
+
     return (
         <li className={styles.cardItem}>
             <div className={styles.cardDate}>
-                <div className={styles.cardDay}>{cardData.dates}</div>
-                <div className={styles.cardMonth}>{cardData.dates}</div>
+                <div className={styles.cardDay}>{date.getDay()}</div>
+                <div className={styles.cardTime}>{time}</div>
             </div>
 
             <div className={styles.cardContent}>
                 <div className={styles.cardInfo}>
-                    <div className={styles.cardTitle}>{cardData.title}</div>
-                    <div dangerouslySetInnerHTML={{ __html: draftToHtml(convertToRaw(editorState.getCurrentContent()))}} className={styles.cardAgenda}></div>
+                    <div className={styles.cardTitle}>{cardInfo.title}</div>
+                    <div onClick={editCard} dangerouslySetInnerHTML={{ __html: draftToHtml(JSON.parse(cardData.description))}} className={styles.cardAgenda}/>
                 </div>
                 <div className={styles.cardControl}>
                     {/*<Link*/}
@@ -136,10 +135,12 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
                             <Input
                                 label="Title"
                                 name="title"
-                                value={cardData.title}
+                                value={cardInfo.title}
                                 containerClasses={classes.input}
                                 onChange={handleChangeInput}
                             />
+
+                            <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime} />
                             <Editor
                                 editorState={editorState}
                                 toolbarClassName="toolbarClassName"
@@ -147,12 +148,6 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
                                 editorClassName="editorClassName"
                                 onEditorStateChange={setEditorState}
                             />
-                            {/*<Input*/}
-                            {/*    label="Agenda"*/}
-                            {/*    name="agenda"*/}
-                            {/*    value={cardData.description}*/}
-                            {/*    onChange={handleChangeInput}*/}
-                            {/*/>*/}
                         </form>
 
                         <Button
