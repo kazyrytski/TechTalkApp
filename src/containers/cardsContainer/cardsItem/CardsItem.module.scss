@@ -3,9 +3,9 @@
     display: flex;
     align-items: center;
 
-    height: 150px;
+    min-height: 150px;
     margin-bottom: 15px;
-
+    word-break: break-all;
     overflow: hidden;
 
     &:first-child {
@@ -18,20 +18,23 @@
 
   &Date {
     margin-right: 50px;
+    min-width: 200px;
   }
 
   &Day {
-    font-size: 55px;
+    font-size: 45px;
     color: #abb0ba;
   }
 
-  &Month {
-    font-size: 25px;
+  &Time {
+    font-size: 20px;
     color: #2a2a30;
+    display: flex;
+    justify-content: space-around;
   }
 
   &Day,
-  &Month {
+  &Time {
     text-align: center;
   }
 
@@ -55,6 +58,9 @@
   &Title,
   &Agenda {
     padding-left: 20px;
+    resize: none;
+    background: white;
+    border: none;
   }
 
   &Control {

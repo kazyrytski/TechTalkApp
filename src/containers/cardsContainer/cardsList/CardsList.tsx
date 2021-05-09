@@ -1,7 +1,8 @@
 import { useActions, useTypedSelector } from "hooks";
 import CardsItem from "../cardsItem/CardsItem";
 import { Card } from "store/cards/cardsActionTypes";
-import { useEffect } from "react";
+import {ClassAttributes, useEffect} from "react";
+import groupByDay from "../../../helpers/groupByDay";
 
 const CardsList = () => {
 
@@ -11,11 +12,18 @@ const CardsList = () => {
     getMeetings();
   }, []);
 
+
   const { cardList } = useTypedSelector((state) => state.cards);
+
+  useEffect(() => {
+    console.log(groupByDay(cardList))
+  }, [cardList])
+
+
 
   return (
       <ul>
-        {cardList.map((card: Card) => {
+        {groupByDay(cardList).map((card: Card) => {
           return <CardsItem cardData={card} key={card.id} />;
         })}
       </ul>
