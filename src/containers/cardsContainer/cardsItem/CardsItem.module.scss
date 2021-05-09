@@ -22,13 +22,15 @@
   }
 
   &Day {
-    font-size: 55px;
+    font-size: 45px;
     color: #abb0ba;
   }
 
   &Time {
-    font-size: 25px;
+    font-size: 20px;
     color: #2a2a30;
+    display: flex;
+    justify-content: space-around;
   }
 
   &Day,

@@ -15,6 +15,7 @@ import draftToHtml from 'draftjs-to-html';
 import { Map } from 'immutable';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import CustomDatePicker from "../../../components/datePicker/DatePicker";
+import formatDate from  "../../../helpers/formatDate"
 
 interface CardsItemProps {
     cardData: Card;
@@ -24,7 +25,6 @@ interface CardInfo {
     title: string;
     description: string;
 }
-
 const useStyles = makeStyles({
     header: {
         display: "flex",
@@ -107,8 +107,8 @@ const CardsItem = ({ cardData }: CardsItemProps) => {
     return (
         <li className={styles.cardItem}>
             <div className={styles.cardDate}>
-                <div className={styles.cardDay}>{date.getDay()}</div>
-                <div className={styles.cardTime}>{time}</div>
+                <div className={styles.cardDay}>{formatDate(date)}</div>
+                <div className={styles.cardTime}><p>start at</p> {time}</div>
             </div>
 
             <div className={styles.cardContent}>

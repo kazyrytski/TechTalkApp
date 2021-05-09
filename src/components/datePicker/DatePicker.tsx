@@ -74,7 +74,7 @@ export default function CustomDatePicker({date, setDate, time, setTime}) {
                 />
             </div>
             <div >
-                <div className={classes.title}>Start Date
+                <div className={classes.title}>Start time
                     <div style={{ color: "#d9dadb", marginLeft: "3px", letterSpacing: "-0.2px" }}>
                         &nbsp; (inclusive)
                     </div>
