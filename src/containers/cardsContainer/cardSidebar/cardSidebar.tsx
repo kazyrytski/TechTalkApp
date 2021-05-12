@@ -18,12 +18,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
-const drawerWidth = 240;
+const drawerWidth = "50%";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
+
         },
         appBar: {
             transition: theme.transitions.create(['margin', 'width'], {
@@ -51,10 +52,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         drawerPaper: {
             width: drawerWidth,
+            display: 'flex',
+            alignItems: 'center'
         },
         drawerHeader: {
+            width: '100%',
+            position: 'relative',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'flex-end',
             padding: theme.spacing(0, 1),
             // necessary for content to be below app bar
             ...theme.mixins.toolbar,
@@ -67,14 +72,14 @@ const useStyles = makeStyles((theme: Theme) =>
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
-            marginLeft: -drawerWidth,
+            marginRight: -drawerWidth,
         },
         contentShift: {
             transition: theme.transitions.create('margin', {
                 easing: theme.transitions.easing.easeOut,
                 duration: theme.transitions.duration.enteringScreen,
             }),
-            marginLeft: 0,
+            marginRight: 0,
         },
     }),
 );
@@ -94,7 +99,7 @@ export default function CardSidebar({ child, open, onClose }) {
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
-                anchor="left"
+                anchor="right"
                 open={open}
                 classes={{
                     paper: classes.drawerPaper,
@@ -107,13 +112,7 @@ export default function CardSidebar({ child, open, onClose }) {
                 </div>
                 {child}
             </Drawer>
-            <main
-                className={clsx(classes.content, {
-                    [classes.contentShift]: open,
-                })}
-            >
-                <div className={classes.drawerHeader} />
-            </main>
+
         </div>
     );
 }

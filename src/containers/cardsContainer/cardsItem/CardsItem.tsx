@@ -7,16 +7,13 @@ import IJSON from 'immutable-json'
 
 import styles from "./CardsItem.module.scss";
 import {useActions} from "hooks";
-import {Button, Dialog, Input} from "components";
 import {makeStyles} from "@material-ui/core/styles";
-import {Editor} from 'react-draft-wysiwyg';
 import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import {Map} from 'immutable';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import CustomDatePicker from "../../../components/datePicker/DatePicker";
 import formatDate from "../../../helpers/formatDate"
 import CardSidebar from "../cardSidebar/cardSidebar";
+import CardsForm from "../cardsForm/CardsForm";
 
 interface CardsItemProps {
     cardData: Card;
@@ -27,38 +24,10 @@ interface CardInfo {
     description: string;
 }
 
-const useStyles = makeStyles({
-    header: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        minHeight: 80,
-        padding: "0 20px",
-        backgroundColor: "#282c34",
-        fontSize: 24,
-        color: "#61dafb",
-    },
-    paper: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        minHeight: "70%",
-        maxWidth: 1000,
-        padding: 10,
-    },
-    input: {
-        marginBottom: 20,
-    },
-});
-
-
 const CardsItem = ({cardData}: CardsItemProps) => {
-
-    const initCardInfo = {title: "", description: ""};
     const [date, setDate] = useState(new Date(cardData.dates[0]));
     const [time, setTime] = useState(cardData.dates[1]);
 
-    const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [cardInfo, setCardInfo] = useState<CardInfo>(cardData);
 
@@ -105,44 +74,12 @@ const CardsItem = ({cardData}: CardsItemProps) => {
 
     };
 
-    const cardForm = (
-        <>
-            <form action="">
-                <Input
-                    label="Title"
-                    name="title"
-                    value={cardInfo.title}
-                    containerClasses={classes.input}
-                    onChange={handleChangeInput}
-                />
-
-                <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime}/>
-                <Editor
-                    editorState={editorState}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName"
-                    editorClassName="editorClassName"
-                    onEditorStateChange={setEditorState}
-                />
-            </form>
-
-            <Button
-                onClick={editCard}
-                // disabled={!(!!cardData.title && !!cardData.description)}
-            >
-                {" "}
-                edit card
-            </Button>
-        </>
-    )
-
     return (
         <li className={styles.cardItem}>
             <div className={styles.cardDate}>
                 <div className={styles.cardDay}>{formatDate(date)}</div>
                 <div className={styles.cardTime}><p>start at</p> {time}</div>
             </div>
-
             <div className={styles.cardContent}>
                 <div className={styles.cardInfo}>
                     <div className={styles.cardTitle}>{cardInfo.title}</div>
@@ -155,9 +92,20 @@ const CardsItem = ({cardData}: CardsItemProps) => {
                     <CardSidebar
                         open={open}
                         onClose={() => setOpen(false)}
-                        child={cardForm}
+                        child={
+                            <CardsForm
+                            title={cardInfo.title}
+                            date={date}
+                            setDate={setDate}
+                            time={time}
+                            setTime={setTime}
+                            editorState={editorState}
+                            setEditorState={setEditorState}
+                            editCard={editCard}
+                            handleChangeInput={handleChangeInput}
+                            />
+                        }
                     />
-
                     <div className={styles.cardDelete} onClick={deleteCard}>Delete</div>
                     <div className={styles.cardCancel}>Cancel</div>
                     <div className={styles.cardView}>View</div>
