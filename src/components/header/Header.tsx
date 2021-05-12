@@ -3,13 +3,9 @@ import {useState, ChangeEvent, useCallback} from "react";
 import {Button, Dialog, Input} from "components";
 import {makeStyles} from "@material-ui/core/styles";
 import {useActions} from "hooks";
-import {Editor} from 'react-draft-wysiwyg';
 import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
-import DatePicker from "react-datepicker";
-import draftToHtml from 'draftjs-to-html';
-import {v4 as uuidv4} from "uuid";
-import {TextField} from "@material-ui/core";
-import CustomDatePicker from "../datePicker/DatePicker";
+import CardsForm from "../../containers/cardsContainer/cardsForm/CardsForm";
+import CardSidebar from "../../containers/cardsContainer/cardSidebar/cardSidebar";
 
 interface CardInfo {
     title: string;
@@ -95,7 +91,6 @@ export default function Header() {
             notes: cardInfo.agenda,
             description: JSON.stringify(convertToRaw(editorState.getCurrentContent())),
             participants: [{fullName: 'kek', lastName: 'kek', isAdmin: true, isSpeaker: true}],
-            // dates: [new Date().getUTCDate(), new Date().toLocaleTimeString("default", {month: "short"})],
             dates: [
                 date,
                 time,
@@ -110,42 +105,28 @@ export default function Header() {
     // @ts-ignore
     // @ts-ignore
     return (
+        <>
         <header className={classes.header}>
             <h3 className="header_title">Tech Talks App</h3>
             <Button onClick={() => setOpen(true)}> Add Card</Button>
-            <Dialog
+        </header>
+            <CardSidebar
                 open={open}
                 onClose={() => setOpen(false)}
-                classes={{
-                    paper: classes.paper,
-                }}
-            >
-                <form action="">
-                    <Input
-                        label="Title"
-                        name="title"
-                        containerClasses={classes.input}
-                        onChange={handleChangeInput}
-                    />
-                    {/*<Input label="Agenda" name="agenda" onChange={handleChangeInput} />*/}
-                    <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime} />
-                    <Editor
+                child={
+                    <CardsForm
+                        title={cardInfo.title}
+                        date={date}
+                        setDate={setDate}
+                        time={time}
+                        setTime={setTime}
                         editorState={editorState}
-                        toolbarClassName="toolbarClassName"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName={"editorClassName " + classes.editor}
-                        onEditorStateChange={setEditorState}
+                        setEditorState={setEditorState}
+                        editCard={onSaveCard}
+                        handleChangeInput={handleChangeInput}
                     />
-                </form>
-
-                <Button
-                    onClick={onSaveCard}
-                    //disabled={!(!!cardInfo.title && !!cardInfo.agenda)}
-                >
-                    {" "}
-                    Save card
-                </Button>
-            </Dialog>
-        </header>
+                }
+            />
+        </>
     );
 }

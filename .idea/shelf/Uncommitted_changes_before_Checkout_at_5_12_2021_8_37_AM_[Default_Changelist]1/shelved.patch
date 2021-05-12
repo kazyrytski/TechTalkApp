@@ -1,0 +1,116 @@
+Index: src/helpers/groupByDay.ts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>export default function groupByDay(array) {\r\n    // const groupedByDay = array.reduce((acc, obj) => {\r\n    //     const property = (new Date(obj[\"dates\"][0])).getTime();\r\n    //     acc[property] = acc[property] || [];\r\n    //     acc[property].push(obj);\r\n    //     return acc;\r\n    // }, []);\r\n    // const sortedByMonth = Object\r\n    //     .keys(groupedByDay)\r\n    //     .sort((a, b) => {\r\n    //     return +a - +b\r\n    //     })\r\n    //     .reduce((acc, el) => {\r\n    //         acc[el] = groupedByDay[el]\r\n    //         return acc\r\n    //     }, {})\r\n    const sortedByDay = array.sort((a, b) => {\r\n        return +(new Date(a.dates[0])).getTime() - +(new Date(b.dates[0])).getTime()\r\n    })\r\n    return sortedByDay\r\n}
+===================================================================
+diff --git a/src/helpers/groupByDay.ts b/src/helpers/groupByDay.ts
+--- a/src/helpers/groupByDay.ts	
++++ b/src/helpers/groupByDay.ts	
+@@ -15,7 +15,7 @@
+     //         return acc
+     //     }, {})
+     const sortedByDay = array.sort((a, b) => {
+-        return +(new Date(a.dates[0])).getTime() - +(new Date(b.dates[0])).getTime()
++        return  +(new Date(b.dates[0])).getTime() - +(new Date(a.dates[0])).getTime()
+     })
+     return sortedByDay
+ }
+\ No newline at end of file
+Index: src/components/header/Header.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, {useEffect} from \"react\";\r\nimport {useState, ChangeEvent, useCallback} from \"react\";\r\nimport {Button, Dialog, Input} from \"components\";\r\nimport {makeStyles} from \"@material-ui/core/styles\";\r\nimport {useActions} from \"hooks\";\r\nimport {Editor} from 'react-draft-wysiwyg';\r\nimport {EditorState, convertToRaw, convertFromRaw} from 'draft-js';\r\nimport DatePicker from \"react-datepicker\";\r\nimport draftToHtml from 'draftjs-to-html';\r\nimport {v4 as uuidv4} from \"uuid\";\r\nimport {TextField} from \"@material-ui/core\";\r\nimport CustomDatePicker from \"../datePicker/DatePicker\";\r\n\r\ninterface CardInfo {\r\n    title: string;\r\n    agenda: string;\r\n}\r\n\r\nconst useStyles = makeStyles({\r\n    header: {\r\n        display: \"flex\",\r\n        alignItems: \"center\",\r\n        justifyContent: \"space-between\",\r\n        minHeight: 80,\r\n        padding: \"0 20px\",\r\n        backgroundColor: \"#282c34\",\r\n        fontSize: 24,\r\n        color: \"#61dafb\",\r\n    },\r\n    paper: {\r\n        display: \"flex\",\r\n        flexDirection: \"column\",\r\n        justifyContent: \"space-between\",\r\n        minHeight: \"70%\",\r\n        maxWidth: 1000,\r\n        padding: 10,\r\n    },\r\n    input: {\r\n        marginBottom: 20,\r\n    },\r\n    editor: {\r\n        minHeight: 300,\r\n        WebkitBoxShadow: \"0px 0px 8px -1px rgba(34, 60, 80, 0.3)\",\r\n        MozBoxShadow: \"0px 0px 8px -1px rgba(34, 60, 80, 0.3)\",\r\n        BoxShadow: \"0px 0px 8px -1px rgba(34, 60, 80, 0.3)\",\r\n        boxSizing: \"border-box\",\r\n        padding: 10\r\n    }\r\n    ,\r\n    dateBlock: {\r\n        margin: \"10px 0\",\r\n        padding: \"0px 10px\",\r\n        display: \"flex\",\r\n        justifyContent: \"space-between\"\r\n    },\r\n    dateField: {\r\n        width: 150\r\n    }\r\n});\r\n\r\nconst initCardInfo = {title: \"\", agenda: \"\"};\r\n\r\nexport default function Header() {\r\n    const classes = useStyles();\r\n\r\n    const [open, setOpen] = useState(false);\r\n    const [cardInfo, setCardInfo] = useState<CardInfo>(initCardInfo);\r\n    const [date, setDate] = useState(new Date());\r\n    const [time, setTime] = useState('10:00');\r\n    const [editorState, setEditorState] = useState(\r\n        () =>\r\n            EditorState.createEmpty()\r\n    );\r\n\r\n    const {createMeetings, getMeetings} = useActions();\r\n\r\n    const handleChangeInput = useCallback(\r\n        (event: ChangeEvent<HTMLInputElement>) =>\r\n            setCardInfo((prevCardInfo) => {\r\n                return {\r\n                    ...prevCardInfo,\r\n                    [event.target.name]: event.target.value,\r\n                };\r\n            }),\r\n        []\r\n    );\r\n\r\n    useEffect(() => {\r\n        getMeetings();\r\n    }, [open])\r\n\r\n    const onSaveCard = () => {\r\n        const newCard = {\r\n            title: cardInfo.title,\r\n            notes: cardInfo.agenda,\r\n            description: JSON.stringify(convertToRaw(editorState.getCurrentContent())),\r\n            participants: [{fullName: 'kek', lastName: 'kek', isAdmin: true, isSpeaker: true}],\r\n            // dates: [new Date().getUTCDate(), new Date().toLocaleTimeString(\"default\", {month: \"short\"})],\r\n            dates: [\r\n                date,\r\n                time,\r\n            ]\r\n        };\r\n        createMeetings(newCard);\r\n\r\n        setOpen(false);\r\n        setCardInfo(initCardInfo);\r\n    };\r\n\r\n    // @ts-ignore\r\n    // @ts-ignore\r\n    return (\r\n        <header className={classes.header}>\r\n            <h3 className=\"header_title\">Tech Talks App</h3>\r\n            <Button onClick={() => setOpen(true)}> Add Card</Button>\r\n            <Dialog\r\n                open={open}\r\n                onClose={() => setOpen(false)}\r\n                classes={{\r\n                    paper: classes.paper,\r\n                }}\r\n            >\r\n                <form action=\"\">\r\n                    <Input\r\n                        label=\"Title\"\r\n                        name=\"title\"\r\n                        containerClasses={classes.input}\r\n                        onChange={handleChangeInput}\r\n                    />\r\n                    {/*<Input label=\"Agenda\" name=\"agenda\" onChange={handleChangeInput} />*/}\r\n                    <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime} />\r\n                    <Editor\r\n                        editorState={editorState}\r\n                        toolbarClassName=\"toolbarClassName\"\r\n                        wrapperClassName=\"wrapperClassName\"\r\n                        editorClassName={\"editorClassName \" + classes.editor}\r\n                        onEditorStateChange={setEditorState}\r\n                    />\r\n                </form>\r\n\r\n                <Button\r\n                    onClick={onSaveCard}\r\n                    //disabled={!(!!cardInfo.title && !!cardInfo.agenda)}\r\n                >\r\n                    {\" \"}\r\n                    Save card\r\n                </Button>\r\n            </Dialog>\r\n        </header>\r\n    );\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/components/header/Header.tsx b/src/components/header/Header.tsx
+--- a/src/components/header/Header.tsx	
++++ b/src/components/header/Header.tsx	
+@@ -39,11 +39,12 @@
+         marginBottom: 20,
+     },
+     editor: {
+-        minHeight: 300,
++        minHeight: "45vh",
+         WebkitBoxShadow: "0px 0px 8px -1px rgba(34, 60, 80, 0.3)",
+         MozBoxShadow: "0px 0px 8px -1px rgba(34, 60, 80, 0.3)",
+         BoxShadow: "0px 0px 8px -1px rgba(34, 60, 80, 0.3)",
+         boxSizing: "border-box",
++        marginBottom: 10,
+         padding: 10
+     }
+     ,
+@@ -128,8 +129,15 @@
+                         onChange={handleChangeInput}
+                     />
+                     {/*<Input label="Agenda" name="agenda" onChange={handleChangeInput} />*/}
+-                    <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime} />
++                    <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime}/>
+                     <Editor
++                        toolbar={{
++                            options: ['inline',  'image', 'remove', 'colorPicker', 'history', 'emoji', 'link'],
++                            inline: { inDropdown: true },
++                            list: { inDropdown: true },
++                            textAlign: { inDropdown: true },
++                            link: { inDropdown: true },
++                        }}
+                         editorState={editorState}
+                         toolbarClassName="toolbarClassName"
+                         wrapperClassName="wrapperClassName"
+Index: src/containers/cardsContainer/cardsItem/CardsItem.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useEffect, ChangeEvent, useCallback, useState } from \"react\";\r\nimport { Link } from \"react-router-dom\";\r\nimport { ROUTES } from \"constants/routes\";\r\nimport { Card } from \"store/cards/cardsActionTypes\";\r\n\r\nimport  IJSON from 'immutable-json'\r\n\r\nimport styles from \"./CardsItem.module.scss\";\r\nimport { useActions } from \"hooks\";\r\nimport { Button, Dialog, Input } from \"components\";\r\nimport { makeStyles } from \"@material-ui/core/styles\";\r\nimport { Editor } from 'react-draft-wysiwyg';\r\nimport { EditorState, convertToRaw, convertFromRaw } from 'draft-js';\r\nimport draftToHtml from 'draftjs-to-html';\r\nimport { Map } from 'immutable';\r\nimport 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';\r\nimport CustomDatePicker from \"../../../components/datePicker/DatePicker\";\r\nimport formatDate from  \"../../../helpers/formatDate\"\r\n\r\ninterface CardsItemProps {\r\n    cardData: Card;\r\n}\r\n\r\ninterface CardInfo {\r\n    title: string;\r\n    description: string;\r\n}\r\nconst useStyles = makeStyles({\r\n    header: {\r\n        display: \"flex\",\r\n        alignItems: \"center\",\r\n        justifyContent: \"space-between\",\r\n        minHeight: 80,\r\n        padding: \"0 20px\",\r\n        backgroundColor: \"#282c34\",\r\n        fontSize: 24,\r\n        color: \"#61dafb\",\r\n    },\r\n    paper: {\r\n        display: \"flex\",\r\n        flexDirection: \"column\",\r\n        justifyContent: \"space-between\",\r\n        minHeight: \"70%\",\r\n        maxWidth: 1000,\r\n        padding: 10,\r\n    },\r\n    input: {\r\n        marginBottom: 20,\r\n    },\r\n});\r\n\r\nconst CardsItem = ({ cardData }: CardsItemProps) => {\r\n\r\n    const initCardInfo = { title: \"\", description: \"\" };\r\n    const [date, setDate] = useState(new Date(cardData.dates[0]));\r\n    const [time, setTime] = useState(cardData.dates[1]);\r\n\r\n    const classes = useStyles();\r\n    const [open, setOpen] = useState(false);\r\n    const [cardInfo, setCardInfo] = useState<CardInfo>(cardData);\r\n\r\n    const { deleteMeetings, getMeetings, editMeetings } = useActions();\r\n    const [editorState, setEditorState] = useState(\r\n        () =>\r\n            EditorState.createWithContent(convertFromRaw(JSON.parse(cardData.description)))\r\n        );\r\n\r\n\r\n\r\n    useEffect(() => {\r\n        getMeetings();\r\n    }, [open])\r\n\r\n\r\n\r\n    const handleChangeInput = useCallback(\r\n        (event: ChangeEvent<HTMLInputElement>) =>\r\n            setCardInfo((prevCardInfo) => {\r\n                return {\r\n                    ...prevCardInfo,\r\n                    [event.target.name]: event.target.value,\r\n                };\r\n            }),\r\n        []\r\n    );\r\n\r\n    const deleteCard = () => {\r\n        deleteMeetings(cardData.id);\r\n        getMeetings();\r\n    };\r\n\r\n    const openDialogForEdit = () => {\r\n        setOpen(true);\r\n    };\r\n\r\n    const editCard = () => {\r\n        const payload = {\r\n            title: cardInfo.title,\r\n            description: JSON.stringify(convertToRaw(editorState.getCurrentContent())),\r\n            dates: [date, time]\r\n        };\r\n        editMeetings(payload, cardData.id);\r\n        setOpen(false);\r\n\r\n    };\r\n\r\n    return (\r\n        <li className={styles.cardItem}>\r\n            <div className={styles.cardDate}>\r\n                <div className={styles.cardDay}>{formatDate(date)}</div>\r\n                <div className={styles.cardTime}><p>start at</p> {time}</div>\r\n            </div>\r\n\r\n            <div className={styles.cardContent}>\r\n                <div className={styles.cardInfo}>\r\n                    <div className={styles.cardTitle}>{cardInfo.title}</div>\r\n                    <div onClick={editCard} dangerouslySetInnerHTML={{ __html: draftToHtml(JSON.parse(cardData.description))}} className={styles.cardAgenda}/>\r\n                </div>\r\n                <div className={styles.cardControl}>\r\n                    {/*<Link*/}\r\n                    {/*    to={`${ROUTES.CARDS.getCardsPath()}/${cardData.id}`}*/}\r\n                    {/*    className={styles.cardEdit}*/}\r\n                    {/*>*/}\r\n                    {/*    Edit*/}\r\n                    {/*</Link>*/}\r\n                    <div className={styles.cardEdit} onClick={openDialogForEdit}>Edit</div>\r\n                    <Dialog\r\n                        open={open}\r\n                        onClose={() => setOpen(false)}\r\n                        classes={{\r\n                            paper: classes.paper,\r\n                        }}\r\n                    >\r\n                        <form action=\"\">\r\n                            <Input\r\n                                label=\"Title\"\r\n                                name=\"title\"\r\n                                value={cardInfo.title}\r\n                                containerClasses={classes.input}\r\n                                onChange={handleChangeInput}\r\n                            />\r\n\r\n                            <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime} />\r\n                            <Editor\r\n                                editorState={editorState}\r\n                                toolbarClassName=\"toolbarClassName\"\r\n                                wrapperClassName=\"wrapperClassName\"\r\n                                editorClassName=\"editorClassName\"\r\n                                onEditorStateChange={setEditorState}\r\n                            />\r\n                        </form>\r\n\r\n                        <Button\r\n                            onClick={editCard}\r\n                            // disabled={!(!!cardData.title && !!cardData.description)}\r\n                        >\r\n                            {\" \"}\r\n                            edit card\r\n                        </Button>\r\n                    </Dialog>\r\n                    <div className={styles.cardDelete} onClick={deleteCard}>Delete</div>\r\n                    <div className={styles.cardCancel}>Cancel</div>\r\n                    <div className={styles.cardView}>View</div>\r\n                </div>\r\n            </div>\r\n        </li>\r\n    );\r\n};\r\n\r\nexport default CardsItem;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/containers/cardsContainer/cardsItem/CardsItem.tsx b/src/containers/cardsContainer/cardsItem/CardsItem.tsx
+--- a/src/containers/cardsContainer/cardsItem/CardsItem.tsx	
++++ b/src/containers/cardsContainer/cardsItem/CardsItem.tsx	
+@@ -142,6 +142,13 @@
+ 
+                             <CustomDatePicker date={date} setDate={setDate} time={time} setTime={setTime} />
+                             <Editor
++                                toolbar={{
++                                    options: ['inline',  'image', 'remove', 'colorPicker', 'history', 'emoji'],
++                                    inline: { inDropdown: true },
++                                    list: { inDropdown: true },
++                                    textAlign: { inDropdown: true },
++                                    link: { inDropdown: true },
++                                }}
+                                 editorState={editorState}
+                                 toolbarClassName="toolbarClassName"
+                                 wrapperClassName="wrapperClassName"
+@@ -157,10 +164,9 @@
+                             {" "}
+                             edit card
+                         </Button>
++
+                     </Dialog>
+                     <div className={styles.cardDelete} onClick={deleteCard}>Delete</div>
+-                    <div className={styles.cardCancel}>Cancel</div>
+-                    <div className={styles.cardView}>View</div>
+                 </div>
+             </div>
+         </li>
+Index: src/containers/cardsContainer/cardsItem/CardsItem.module.scss
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.card {\r\n  &Item {\r\n    display: flex;\r\n    align-items: center;\r\n\r\n    min-height: 150px;\r\n    margin-bottom: 15px;\r\n    word-break: break-all;\r\n    overflow: hidden;\r\n\r\n    &:first-child {\r\n      margin-top: 10px;\r\n    }\r\n    &:last-child {\r\n      margin-bottom: 0;\r\n    }\r\n  }\r\n\r\n  &Date {\r\n    margin-right: 50px;\r\n    min-width: 200px;\r\n  }\r\n\r\n  &Day {\r\n    font-size: 45px;\r\n    color: #abb0ba;\r\n  }\r\n\r\n  &Time {\r\n    font-size: 20px;\r\n    color: #2a2a30;\r\n    display: flex;\r\n    justify-content: space-around;\r\n  }\r\n\r\n  &Day,\r\n  &Time {\r\n    text-align: center;\r\n  }\r\n\r\n  &Info {\r\n    width: 100%;\r\n  }\r\n\r\n  &Content {\r\n    display: flex;\r\n    justify-content: space-between;\r\n\r\n    width: 100%;\r\n    height: 100%;\r\n    border: 2px solid #6876a4;\r\n    border-radius: 5px;\r\n  }\r\n\r\n  &Title {\r\n    border-bottom: 1px solid #686a80;\r\n  }\r\n  &Title,\r\n  &Agenda {\r\n    padding-left: 20px;\r\n    resize: none;\r\n    background: white;\r\n    border: none;\r\n  }\r\n\r\n  &Control {\r\n    display: inline-grid;\r\n    grid-template-columns: repeat(2, 1fr);\r\n    grid-template-rows: repeat(2, 1fr);\r\n    grid-gap: 1px;\r\n    background-color: #6876a4;\r\n\r\n    width: 30%;\r\n    border-left: 1px solid #6876a4;\r\n  }\r\n\r\n  &Edit,\r\n  &Delete,\r\n  &Cancel,\r\n  &View {\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    background-color: white;\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/containers/cardsContainer/cardsItem/CardsItem.module.scss b/src/containers/cardsContainer/cardsItem/CardsItem.module.scss
+--- a/src/containers/cardsContainer/cardsItem/CardsItem.module.scss	
++++ b/src/containers/cardsContainer/cardsItem/CardsItem.module.scss	
+@@ -45,9 +45,8 @@
+   &Content {
+     display: flex;
+     justify-content: space-between;
+-
++    min-height: 120px;
+     width: 100%;
+-    height: 100%;
+     border: 2px solid #6876a4;
+     border-radius: 5px;
+   }

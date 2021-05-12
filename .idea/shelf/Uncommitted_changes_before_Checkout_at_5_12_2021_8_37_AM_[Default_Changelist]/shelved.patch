@@ -1,0 +1,21 @@
+Index: src/containers/cardsContainer/cardsList/CardsList.tsx
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import { useActions, useTypedSelector } from \"hooks\";\r\nimport CardsItem from \"../cardsItem/CardsItem\";\r\nimport { Card } from \"store/cards/cardsActionTypes\";\r\nimport {ClassAttributes, useEffect} from \"react\";\r\nimport groupByDay from \"../../../helpers/groupByDay\";\r\n\r\nconst CardsList = () => {\r\n\r\n  const { getMeetings } = useActions();\r\n\r\n  useEffect(() => {\r\n    getMeetings();\r\n  }, []);\r\n\r\n\r\n  const { cardList } = useTypedSelector((state) => state.cards);\r\n\r\n  useEffect(() => {\r\n    console.log(groupByDay(cardList))\r\n  }, [cardList])\r\n\r\n\r\n\r\n  return (\r\n      <ul>\r\n        {groupByDay(cardList).map((card: Card) => {\r\n          return <CardsItem cardData={card} key={card.id} />;\r\n        })}\r\n      </ul>\r\n  );\r\n};\r\n\r\nexport default CardsList;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/containers/cardsContainer/cardsList/CardsList.tsx b/src/containers/cardsContainer/cardsList/CardsList.tsx
+--- a/src/containers/cardsContainer/cardsList/CardsList.tsx	
++++ b/src/containers/cardsContainer/cardsList/CardsList.tsx	
+@@ -15,10 +15,6 @@
+ 
+   const { cardList } = useTypedSelector((state) => state.cards);
+ 
+-  useEffect(() => {
+-    console.log(groupByDay(cardList))
+-  }, [cardList])
+-
+ 
+ 
+   return (
