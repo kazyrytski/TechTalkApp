@@ -2,13 +2,10 @@ import React, {useEffect} from "react";
 import {useState, ChangeEvent, useCallback} from "react";
 import {Button, Dialog, Input} from "components";
 import {makeStyles} from "@material-ui/core/styles";
+import Drawer from '@material-ui/core/Drawer';
 import {useActions} from "hooks";
 import {Editor} from 'react-draft-wysiwyg';
 import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
-import DatePicker from "react-datepicker";
-import draftToHtml from 'draftjs-to-html';
-import {v4 as uuidv4} from "uuid";
-import {TextField} from "@material-ui/core";
 import CustomDatePicker from "../datePicker/DatePicker";
 
 interface CardInfo {
