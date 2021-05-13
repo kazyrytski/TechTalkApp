@@ -1,8 +1,9 @@
 import CustomDatePicker from "../../../components/datePicker/DatePicker";
-import React from "react";
+import React, {useState} from "react";
 import {Button, Input} from "components";
 import {Editor} from 'react-draft-wysiwyg';
 import {makeStyles} from "@material-ui/core/styles";
+import axios from 'axios';
 
 const useStyles = makeStyles({
     header: {
@@ -43,6 +44,35 @@ const CardsForm = ({
                        handleChangeInput
                    }) => {
     const classes = useStyles();
+    const [uploadedImages, setUploadedImages] = useState([])
+    const [url, setUrl] = useState()
+
+
+    async function  uploadImageHandler(file) {
+        let formData = new FormData();
+        formData.append("file", file);
+        const imgPath = await axios.post('http://localhost:5000/api/image/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(({data}) => {
+            return data.imagePath
+        });
+        const imageObject = {
+            file: file,
+            localSrc: `http://localhost:5000/api/image/${imgPath}`,
+        }
+        // @ts-ignore
+        setUploadedImages((prevState => ([...prevState, imageObject])))
+
+
+        return new Promise(
+            (resolve, reject) => {
+                resolve({data: {link: `http://localhost:5000/api/image/${imgPath}`}});
+            }
+        );
+    }
+
     return (
         <div className={classes.formWrapper}>
             <form action="">
@@ -67,7 +97,9 @@ const CardsForm = ({
                         link: {inDropdown: true},
                         embedded: {inDropdown: true},
                         emoji: {inDropdown: true},
-                        image: {inDropdown: true},
+                        image: {
+                            uploadCallback: uploadImageHandler, alt: {present: true, mandatory: true}
+                        }
                     }}
 
                 />
