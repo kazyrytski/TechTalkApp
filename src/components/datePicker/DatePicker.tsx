@@ -1,7 +1,7 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import {makeStyles} from "@material-ui/core/styles";
-import TimePicker from 'react-time-picker';
+import TimePicker from "react-time-picker";
 
 const useStyles = makeStyles({
     input: {

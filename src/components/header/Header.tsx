@@ -1,9 +1,9 @@
-import React, {useEffect} from "react";
-import {useState, ChangeEvent, useCallback} from "react";
-import {Button, Dialog, Input} from "components";
-import {makeStyles} from "@material-ui/core/styles";
-import {useActions} from "hooks";
-import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
+import React, { useEffect } from "react";
+import { useState, ChangeEvent, useCallback } from "react";
+import { Button } from "components";
+import { makeStyles } from "@material-ui/core/styles";
+import { useActions } from "hooks";
+import { EditorState, convertToRaw } from "draft-js";
 import CardsForm from "../../containers/cardsContainer/cardsForm/CardsForm";
 import CardSidebar from "../../containers/cardsContainer/cardSidebar/cardSidebar";
 
@@ -83,7 +83,7 @@ export default function Header() {
 
     useEffect(() => {
         getMeetings();
-    }, [open])
+    }, [open]);
 
     const onSaveCard = () => {
         const newCard = {
@@ -102,7 +102,6 @@ export default function Header() {
         setCardInfo(initCardInfo);
     };
 
-    // @ts-ignore
     // @ts-ignore
     return (
         <>

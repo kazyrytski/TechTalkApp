@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { CardsActions, CardsActionTypes, CardsState } from "./cardsActionTypes";
 
 const initialState: CardsState = {

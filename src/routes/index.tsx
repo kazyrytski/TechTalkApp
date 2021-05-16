@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { CardsPage } from "pages";
 import { Header } from "components";
