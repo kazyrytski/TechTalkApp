@@ -1,9 +1,9 @@
+import React from "react";
+import { Button, Input } from "components";
+import { Editor } from "react-draft-wysiwyg";
+import { makeStyles } from "@material-ui/core/styles";
+import axios from "axios";
 import CustomDatePicker from "../../../components/datePicker/DatePicker";
-import React, {useState} from "react";
-import {Button, Input} from "components";
-import {Editor} from 'react-draft-wysiwyg';
-import {makeStyles} from "@material-ui/core/styles";
-import axios from 'axios';
 
 const useStyles = makeStyles({
     header: {
@@ -33,22 +33,20 @@ const useStyles = makeStyles({
 });
 
 const CardsForm = ({
-                       title,
-                       date,
-                       setDate,
-                       time,
-                       setTime,
-                       editorState,
-                       setEditorState,
-                       editCard,
-                       handleChangeInput
-                   }) => {
+    title,
+    date,
+    setDate,
+    time,
+    setTime,
+    editorState,
+    setEditorState,
+    editCard,
+    handleChangeInput
+}) => {
+
     const classes = useStyles();
-    const [uploadedImages, setUploadedImages] = useState([])
-    const [url, setUrl] = useState()
 
-
-    async function  uploadImageHandler(file) {
+    async function uploadImageHandler(file) {
         let formData = new FormData();
         formData.append("file", file);
         const imgPath = await axios.post('http://localhost:5000/api/image/upload', formData, {
@@ -61,10 +59,7 @@ const CardsForm = ({
         const imageObject = {
             file: file,
             localSrc: `http://localhost:5000/api/image/${imgPath}`,
-        }
-        // @ts-ignore
-        setUploadedImages((prevState => ([...prevState, imageObject])))
-
+        };
 
         return new Promise(
             (resolve, reject) => {
@@ -91,9 +86,19 @@ const CardsForm = ({
                     wrapperClassName="wrapperClassName"
                     editorClassName="editorClassName"
                     onEditorStateChange={setEditorState}
+                    placeholder={"Description"}
                     toolbar={{
-                        options: ['inline', 'colorPicker', 'link', 'embedded', 'emoji', 'image'],
-                        colorPicker: {inDropdown: true},
+                        options: ['inline', 'list', 'colorPicker', 'embedded', 'emoji', 'image'],
+                        list: {
+                            inDropdown: true,
+                        },
+                        inline: {
+                            inDropdown: true,
+                            options: ['bold', 'italic', 'underline', 'strikethrough', 'monospace'],
+                        },
+                        colorPicker: {
+                            inDropdown: true,
+                        },
                         link: {inDropdown: true},
                         embedded: {inDropdown: true},
                         emoji: {inDropdown: true},

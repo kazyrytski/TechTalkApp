@@ -1,15 +1,9 @@
-import React, {useEffect, ChangeEvent, useCallback, useState} from "react";
-import {Link} from "react-router-dom";
-import {ROUTES} from "constants/routes";
-import {Card} from "store/cards/cardsActionTypes";
-
-import IJSON from 'immutable-json'
-
+import React, { useEffect, ChangeEvent, useCallback, useState } from "react";
+import { Card } from "store/cards/cardsActionTypes";
 import styles from "./CardsItem.module.scss";
-import {useActions} from "hooks";
-import {makeStyles} from "@material-ui/core/styles";
-import {EditorState, convertToRaw, convertFromRaw} from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
+import { useActions } from "hooks";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import formatDate from "../../../helpers/formatDate"
 import CardSidebar from "../cardSidebar/cardSidebar";
@@ -40,7 +34,7 @@ const CardsItem = ({cardData}: CardsItemProps) => {
 
     useEffect(() => {
         getMeetings();
-    }, [open])
+    }, [open]);
 
 
     const handleChangeInput = useCallback(
@@ -107,8 +101,6 @@ const CardsItem = ({cardData}: CardsItemProps) => {
                         }
                     />
                     <div className={styles.cardDelete} onClick={deleteCard}>Delete</div>
-                    <div className={styles.cardCancel}>Cancel</div>
-                    <div className={styles.cardView}>View</div>
                 </div>
             </div>
         </li>

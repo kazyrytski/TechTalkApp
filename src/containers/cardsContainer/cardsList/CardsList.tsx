@@ -1,7 +1,7 @@
+import React, { useEffect } from "react";
 import { useActions, useTypedSelector } from "hooks";
 import CardsItem from "../cardsItem/CardsItem";
 import { Card } from "store/cards/cardsActionTypes";
-import {ClassAttributes, useEffect} from "react";
 import groupByDay from "../../../helpers/groupByDay";
 
 const CardsList = () => {
@@ -16,8 +16,8 @@ const CardsList = () => {
   const { cardList } = useTypedSelector((state) => state.cards);
 
   useEffect(() => {
-    console.log(groupByDay(cardList))
-  }, [cardList])
+    groupByDay(cardList);
+  }, [cardList]);
 
 
 

@@ -16,7 +16,6 @@ export default function formatDate(date: Date): string {
 
     const day = date.getDate();
     const monthIndex = date.getMonth();
-    const year = date.getFullYear();
 
     return day
         + " "
